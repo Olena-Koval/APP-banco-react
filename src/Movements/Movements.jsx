@@ -2,12 +2,7 @@ import React from 'react';
 import './Movements.css';
 import dayjs from 'dayjs'; // Importamos dayjs
 
-const Movements = ({ movements, onUpdateBalance }) => {
-  // Función para manejar el cambio de balance cuando hay una nueva transacción
-  const handleTransaction = (movement) => {
-    onUpdateBalance(movement);
-  };
-
+const Movements = ({ movements }) => {
   // Función para mostrar la fecha con el formato "hace X días" y también el formato estándar
   const formatDate = (date) => {
     const today = dayjs(); // Obtiene la fecha actual
@@ -35,7 +30,7 @@ const Movements = ({ movements, onUpdateBalance }) => {
             </div>
             <div className="movements__date">
               <span>{relativeDate} </span> | <span>{standardDate}</span>
-            </div> {/* Mostrar ambas fechas */}
+            </div> 
             <div className="movements__value">{movement.value}€</div>
           </div>
         );
