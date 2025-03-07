@@ -1,5 +1,6 @@
 import React from 'react';
 import './Movements.css';
+import dayjs from 'dayjs'; // Importamos dayjs
 
 const Movements = ({ movements, onUpdateBalance }) => {
   // Función para manejar el cambio de balance cuando hay una nueva transacción
@@ -7,17 +8,38 @@ const Movements = ({ movements, onUpdateBalance }) => {
     onUpdateBalance(movement);
   };
 
+  // Función para mostrar la fecha con el formato "hace X días" y también el formato estándar
+  const formatDate = (date) => {
+    const today = dayjs(); // Obtiene la fecha actual
+    const movementDate = dayjs(date); // Convierte la fecha del movimiento
+    const diffInDays = today.diff(movementDate, 'day'); // Calcula la diferencia en días
+
+    const relativeDate = diffInDays === 0 
+      ? "Hoy" 
+      : `Hace ${diffInDays} ${diffInDays === 1 ? 'día' : 'días'}`;
+
+    const standardDate = movementDate.format('YYYY-MM-DD'); // Formato estándar 'YYYY-MM-DD'
+
+    return { relativeDate, standardDate };
+  };
+
   return (
     <div className="movements">
-      {movements.map((movement, index) => (
-        <div key={index} className="movements__row">
-          <div className={`movements__type movements__type--${movement.type}`}>
-            {movement.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
+      {movements.map((movement, index) => {
+        const { relativeDate, standardDate } = formatDate(movement.date);
+
+        return (
+          <div key={index} className="movements__row">
+            <div className={`movements__type movements__type--${movement.type}`}>
+              {movement.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
+            </div>
+            <div className="movements__date">
+              <span>{relativeDate} </span> | <span>{standardDate}</span>
+            </div> {/* Mostrar ambas fechas */}
+            <div className="movements__value">{movement.value}€</div>
           </div>
-          <div className="movements__date">{movement.date}</div>
-          <div className="movements__value">{movement.value}€</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

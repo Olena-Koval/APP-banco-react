@@ -4,14 +4,15 @@ import Welcome from "./Welcome/Welcome";
 import Login from "./Login/Login";
 import Balance from "./Balance/Balance";
 import Movements from "./Movements/Movements";
+import dayjs from 'dayjs'; // Importamos dayjs
 
 function App() {
   // Estado para manejar el balance y las transacciones
   const [movements, setMovements] = useState([
-    { type: "deposit", date: "2025-03-01", value: 4000 },
-    { type: "withdrawal", date: "2025-03-02", value: -378 },
-    { type: "deposit", date: "2025-03-03", value: 1500 },
-    { type: "withdrawal", date: "2025-03-04", value: -200 }
+    { type: "deposit", date: dayjs().subtract(3, 'days').format('YYYY-MM-DD'), value: 4000 },
+    { type: "withdrawal", date: dayjs().subtract(1, 'day').format('YYYY-MM-DD'), value: -378 },
+    { type: "deposit", date: dayjs().subtract(12, 'days').format('YYYY-MM-DD'), value: 1500 },
+    { type: "withdrawal", date: dayjs().subtract(20, 'days').format('YYYY-MM-DD'), value: -200 }
   ]);
 
   // Función para agregar un nuevo movimiento
@@ -96,11 +97,7 @@ function App() {
           <h2>Close account</h2>
           <form className="form form--close">
             <input type="text" className="form__input form__input--user" />
-            <input
-              type="password"
-              maxLength="6"
-              className="form__input form__input--pin"
-            />
+            <input type="password" maxLength="6" className="form__input form__input--pin" />
             <button className="form__btn form__btn--close">&rarr;</button>
             <label className="form__label">Confirm user</label>
             <label className="form__label">Confirm PIN</label>
