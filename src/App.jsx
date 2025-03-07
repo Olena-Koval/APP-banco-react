@@ -1,22 +1,47 @@
-import React, { useState } from 'react';
-import './App.css';
-import Welcome from './Welcome/Welcome';
-import Login from './Login/Login';
-import Balance from './Balance/Balance';
-import Movements from './Movements/Movements';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Welcome from "./Welcome/Welcome";
+import Login from "./Login/Login";
+import Balance from "./Balance/Balance";
+import Movements from "./Movements/Movements";
 
 function App() {
   // Estado para manejar el balance y las transacciones
   const [movements, setMovements] = useState([
-    { type: 'deposit', date: '3 days ago', value: '4,000€' },
-    { type: 'withdrawal', date: '24/01/2037', value: '-378€' },
-    { type: 'deposit', date: '12/01/2037', value: '1,500€' },
-    { type: 'withdrawal', date: '01/01/2037', value: '-200€' },
+    { type: "deposit", date: "3 days ago", value: 4000 },
+    { type: "withdrawal", date: "24/01/2037", value: -378 },
+    { type: "deposit", date: "12/01/2037", value: 1500 },
+    { type: "withdrawal", date: "01/01/2037", value: -200 }
   ]);
 
+  // Función para agregar un nuevo movimiento
   const updateBalance = (movement) => {
-    setMovements([...movements, movement]); // Agregamos la nueva transacción al estado de movimientos
+    setMovements([...movements, movement]);
   };
+
+  // Calcular "In", "Out" e "Interest" cuando los movimientos cambian
+  const calculateSummary = () => {
+    let totalIn = 0;
+    let totalOut = 0;
+    let totalInterest = 0;
+
+    // Calcular total de "In" (depósitos) y "Out" (retiros)
+    movements.forEach((movement) => {
+      if (movement.type === "deposit") {
+        totalIn += movement.value;
+      } else if (movement.type === "withdrawal") {
+        totalOut += Math.abs(movement.value); // Asegurarnos de que "Out" sea positivo
+      }
+    });
+
+    // Calcular el interés (5% de los depósitos)
+    totalInterest = totalIn * 0.05;
+
+    return { totalIn, totalOut, totalInterest };
+  };
+
+  // Llamamos a la función calculateSummary cada vez que los movimientos cambian
+  const { totalIn, totalOut, totalInterest } = calculateSummary();
 
   return (
     <>
@@ -36,11 +61,11 @@ function App() {
         {/* SUMMARY */}
         <div className="summary">
           <p className="summary__label">In</p>
-          <p className="summary__value summary__value--in">0000€</p>
+          <p className="summary__value summary__value--in">{totalIn}€</p>
           <p className="summary__label">Out</p>
-          <p className="summary__value summary__value--out">0000€</p>
+          <p className="summary__value summary__value--out">{totalOut}€</p>
           <p className="summary__label">Interest</p>
-          <p className="summary__value summary__value--interest">0000€</p>
+          <p className="summary__value summary__value--interest">{totalInterest.toFixed(2)}€</p>
           <button className="btn--sort">&downarrow; SORT</button>
         </div>
 
