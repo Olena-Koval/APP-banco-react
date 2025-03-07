@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import './App.css';
 import Welcome from './Welcome/Welcome';
 import Login from './Login/Login';
@@ -5,6 +6,18 @@ import Balance from './Balance/Balance';
 import Movements from './Movements/Movements';
 
 function App() {
+  // Estado para manejar el balance y las transacciones
+  const [movements, setMovements] = useState([
+    { type: 'deposit', date: '3 days ago', value: '4,000€' },
+    { type: 'withdrawal', date: '24/01/2037', value: '-378€' },
+    { type: 'deposit', date: '12/01/2037', value: '1,500€' },
+    { type: 'withdrawal', date: '01/01/2037', value: '-200€' },
+  ]);
+
+  const updateBalance = (movement) => {
+    setMovements([...movements, movement]); // Agregamos la nueva transacción al estado de movimientos
+  };
+
   return (
     <>
       <nav>
@@ -15,10 +28,10 @@ function App() {
 
       <main className="app">
         {/* BALANCE */}
-        <Balance />
+        <Balance movements={movements} />
 
         {/* MOVEMENTS */}
-        <Movements />
+        <Movements movements={movements} onUpdateBalance={updateBalance} />
 
         {/* SUMMARY */}
         <div className="summary">
