@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Welcome from "./Welcome/Welcome";
 import Login from "./Login/Login";
@@ -15,9 +15,18 @@ function App() {
     { type: "withdrawal", date: dayjs().subtract(20, 'days').format('YYYY-MM-DD'), value: -200 }
   ]);
 
+  // Función para ordenar los movimientos por fecha
+  const sortMovementsByDate = (movements) => {
+    return movements.sort((a, b) => {
+      return dayjs(b.date).isBefore(dayjs(a.date)) ? 1 : -1;  // Orden descendente por fecha
+    });
+  };
+
   // Función para agregar un nuevo movimiento
   const updateBalance = (movement) => {
-    setMovements([...movements, movement]);
+    const updatedMovements = [...movements, movement];
+    // Ordenar los movimientos cada vez que se agrega un movimiento
+    setMovements(sortMovementsByDate(updatedMovements));
   };
 
   // Calcular "In", "Out" e "Interest" cuando los movimientos cambian
@@ -104,7 +113,6 @@ function App() {
           </form>
         </div>
 
-        {/* LOGOUT TIMER */}
         <p className="logout-timer">
           You will be logged out in <span className="timer">05:00</span>
         </p>
