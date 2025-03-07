@@ -8,10 +8,10 @@ import Movements from "./Movements/Movements";
 function App() {
   // Estado para manejar el balance y las transacciones
   const [movements, setMovements] = useState([
-    { type: "deposit", date: "3 days ago", value: 4000 },
-    { type: "withdrawal", date: "24/01/2037", value: -378 },
-    { type: "deposit", date: "12/01/2037", value: 1500 },
-    { type: "withdrawal", date: "01/01/2037", value: -200 }
+    { type: "deposit", date: "2025-03-01", value: 4000 },
+    { type: "withdrawal", date: "2025-03-02", value: -378 },
+    { type: "deposit", date: "2025-03-03", value: 1500 },
+    { type: "withdrawal", date: "2025-03-04", value: -200 }
   ]);
 
   // Función para agregar un nuevo movimiento

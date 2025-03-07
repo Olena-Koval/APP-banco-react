@@ -15,7 +15,7 @@ const Movements = ({ movements, onUpdateBalance }) => {
             {movement.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
           </div>
           <div className="movements__date">{movement.date}</div>
-          <div className="movements__value">{movement.value}</div>
+          <div className="movements__value">{movement.value}€</div>
         </div>
       ))}
     </div>
