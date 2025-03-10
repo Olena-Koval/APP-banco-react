@@ -5,6 +5,7 @@ import Login from "./Login/Login";
 import Balance from "./Balance/Balance";
 import Movements from "./Movements/Movements";
 import dayjs from 'dayjs';
+import { faker } from '@faker-js/faker'; // Importamos Faker.js
 
 function App() {
   // Estado para manejar los movimientos y el balance
@@ -88,6 +89,27 @@ function App() {
   };
 
   const { totalIn, totalOut, totalInterest } = calculateSummary();
+
+  // Función para generar movimientos aleatorios con Faker.js
+  const generateRandomMovement = () => {
+    const randomType = Math.random() > 0.5 ? "deposit" : "withdrawal";
+    const randomValue = faker.datatype.number({ min: 10, max: 5000 }); // Valor aleatorio entre 10 y 5000
+
+    return {
+      type: randomType,
+      date: dayjs(faker.date.recent()).format('YYYY-MM-DD'), // Fecha aleatoria reciente
+      value: randomType === "deposit" ? randomValue : -randomValue // Si es depósito, valor positivo, si es retiro, negativo
+    };
+  };
+
+  // Generar 5 movimientos aleatorios
+  const generateRandomMovements = () => {
+    const randomMovements = [];
+    for (let i = 0; i < 5; i++) {
+      randomMovements.push(generateRandomMovement());
+    }
+    setMovements((prevMovements) => [...prevMovements, ...randomMovements]);
+  };
 
   return (
     <>
@@ -182,6 +204,13 @@ function App() {
               &rarr; Close Account
             </button>
           </form>
+        </div>
+
+        {/* BUTTON TO GENERATE RANDOM MOVEMENTS */}
+        <div className="generate-movements">
+          <button onClick={generateRandomMovements} className="generate-btn">
+            Generate Random Movements
+          </button>
         </div>
       </main>
     </>
