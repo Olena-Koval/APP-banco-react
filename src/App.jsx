@@ -17,16 +17,21 @@ function App() {
 
   const [balance, setBalance] = useState(4000); // Balance inicial
   const [accountClosed, setAccountClosed] = useState(false); // Estado para verificar si la cuenta está cerrada
+  const [sortOrder, setSortOrder] = useState('desc'); // Estado para gestionar el orden de los movimientos
 
   // Función para ordenar los movimientos por fecha
-  const sortMovementsByDate = (movements) => {
-    return movements.sort((a, b) => dayjs(b.date).isBefore(dayjs(a.date)) ? 1 : -1);
+  const sortMovementsByDate = (movements, order) => {
+    return movements.sort((a, b) => {
+      const dateA = dayjs(a.date);
+      const dateB = dayjs(b.date);
+      return order === 'asc' ? dateA - dateB : dateB - dateA;
+    });
   };
 
   // Función para actualizar el balance y movimientos
   const updateBalance = (movement) => {
     const updatedMovements = [...movements, movement];
-    setMovements(sortMovementsByDate(updatedMovements));
+    setMovements(sortMovementsByDate(updatedMovements, sortOrder));
 
     if (movement.type === "deposit") {
       setBalance(balance + movement.value);
@@ -73,6 +78,11 @@ function App() {
   const handleLoanRequest = (loanAmount) => {
     if (loanAmount <= 0) {
       alert("Por favor ingrese una cantidad válida.");
+      return;
+    }
+
+    if (loanAmount > balance * 2) {
+      alert("El préstamo no puede exceder el 200% del saldo.");
       return;
     }
 
@@ -270,6 +280,13 @@ function App() {
         <div className="generate-movements">
           <button onClick={generateRandomMovements} className="generate-btn">
             Generate Random Movements
+          </button>
+        </div>
+
+        {/* BUTTON TO TOGGLE SORT ORDER */}
+        <div className="toggle-sort-order">
+          <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} className="sort-btn">
+            Toggle Sort Order
           </button>
         </div>
       </main>

@@ -23,18 +23,20 @@ const Movements = ({ movements }) => {
       {movements.length === 0 ? (
         <p>No hay movimientos recientes.</p> // Mensaje en caso de que no haya movimientos
       ) : (
-        movements.map((movement, index) => {
+        movements.map((movement) => {
           const { relativeDate, standardDate } = formatDate(movement.date); // Obtenemos la fecha formateada
 
           return (
-            <div key={index} className="movements__row">
+            <div key={movement.date + movement.value} className="movements__row">
               <div className={`movements__type movements__type--${movement.type}`}>
                 {movement.type === 'deposit' ? 'Depósito' : 'Retiro'} {/* Traducción de tipo de movimiento */}
               </div>
               <div className="movements__date">
                 <span>{relativeDate} </span> | <span>{standardDate}</span> {/* Mostrar fechas relativa y estándar */}
               </div> 
-              <div className="movements__value">{movement.value}€</div> {/* Mostrar valor del movimiento */}
+              <div className={`movements__value movements__value--${movement.type}`}>
+                {movement.value}€ {/* Mostrar valor del movimiento con símbolo de euro */}
+              </div> 
             </div>
           );
         })
