@@ -17,6 +17,7 @@ function App() {
   ]);
 
   const [balance, setBalance] = useState(4000); // Balance inicial
+  const [accountClosed, setAccountClosed] = useState(false); // Estado para verificar si la cuenta está cerrada
 
   // Función para ordenar los movimientos por fecha
   const sortMovementsByDate = (movements) => {
@@ -111,6 +112,28 @@ function App() {
     setMovements((prevMovements) => [...prevMovements, ...randomMovements]);
   };
 
+  // Función para cerrar la cuenta
+  const handleCloseAccount = (username, pin) => {
+    const correctUser = "alumno";  // Ejemplo: nombre de usuario correcto
+    const correctPin = "123456";   // Ejemplo: PIN correcto
+    
+    if (username === correctUser && pin === correctPin) {
+      setAccountClosed(true);  // Cambiar el estado a "cerrado"
+      alert("Cuenta cerrada con éxito.");
+    } else {
+      alert("Usuario o PIN incorrectos.");
+    }
+  };
+
+  if (accountClosed) {
+    return (
+      <div className="account-closed">
+        <h2>Cuenta Cerrada</h2>
+        <p>Tu cuenta ha sido cerrada. Ya no puedes realizar más operaciones.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <nav>
@@ -186,9 +209,18 @@ function App() {
         {/* OPERATION: CLOSE */}
         <div className="operation operation--close">
           <h2>Close account</h2>
-          <form className="form form--close">
+          <form
+            className="form form--close"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const username = e.target.user.value;
+              const pin = e.target.pin.value;
+              handleCloseAccount(username, pin);
+            }}
+          >
             <input
               type="text"
+              name="user"
               className="form__input form__input--user"
               placeholder="Confirm user"
               required
@@ -196,6 +228,7 @@ function App() {
             <input
               type="password"
               maxLength="6"
+              name="pin"
               className="form__input form__input--pin"
               placeholder="Confirm PIN"
               required
