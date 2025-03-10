@@ -5,10 +5,9 @@ import Login from "./Login/Login";
 import Balance from "./Balance/Balance";
 import Movements from "./Movements/Movements";
 import dayjs from 'dayjs';
-import { faker } from '@faker-js/faker'; // Importamos Faker.js
+import { faker } from '@faker-js/faker';
 
 function App() {
-  // Estado para manejar los movimientos y el balance
   const [movements, setMovements] = useState([
     { type: "deposit", date: dayjs().subtract(3, 'days').format('YYYY-MM-DD'), value: 4000 },
     { type: "withdrawal", date: dayjs().subtract(1, 'day').format('YYYY-MM-DD'), value: -378 },
@@ -68,6 +67,26 @@ function App() {
     updateBalance(deposit);
 
     alert("Transferencia realizada con éxito.");
+  };
+
+  // Función para manejar la solicitud de préstamo
+  const handleLoanRequest = (loanAmount) => {
+    if (loanAmount <= 0) {
+      alert("Por favor ingrese una cantidad válida.");
+      return;
+    }
+
+    // Crear un nuevo "movimiento" para el préstamo
+    const loanMovement = {
+      type: "deposit", // El préstamo es un depósito
+      date: dayjs().format('YYYY-MM-DD'),
+      value: loanAmount
+    };
+
+    // Actualizar el balance y los movimientos
+    updateBalance(loanMovement);
+
+    alert("Préstamo solicitado con éxito.");
   };
 
   // Calcular total de "In", "Out" e "Interest"
@@ -147,7 +166,7 @@ function App() {
         <Balance balance={balance} movements={movements} />
 
         {/* MOVEMENTS */}
-        <Movements movements={movements} onUpdateBalance={updateBalance} />
+        <Movements movements={movements} />
 
         {/* SUMMARY */}
         <div className="summary">
@@ -193,11 +212,19 @@ function App() {
         {/* OPERATION: LOAN */}
         <div className="operation operation--loan">
           <h2>Request loan</h2>
-          <form className="form form--loan">
+          <form
+            className="form form--loan"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const loanAmount = parseFloat(e.target.loanAmount.value);
+              handleLoanRequest(loanAmount);
+            }}
+          >
             <input
               type="number"
+              name="loanAmount"
               className="form__input form__input--loan-amount"
-              placeholder="Amount"
+              placeholder="Loan Amount"
               required
             />
             <button type="submit" className="form__btn form__btn--loan">

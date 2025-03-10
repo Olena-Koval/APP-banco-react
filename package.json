@@ -1,12 +1,12 @@
 {
-  "homepage": "https://olena-koval.github.io/APP-banco",
+  "homepage": "https://Olena-Koval.github.io/APP-banco-react/",  
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "predeploy": "npm run build",
+    "dev": "vite", 
+    "build": "vite build", 
+    "predeploy": "npm run build", 
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
